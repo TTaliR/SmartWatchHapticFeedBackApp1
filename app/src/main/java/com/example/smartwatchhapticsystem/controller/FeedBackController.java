@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
+
 public class FeedBackController implements SensorEventListener {
 
 
@@ -63,6 +64,7 @@ public class FeedBackController implements SensorEventListener {
                 VibrationEffect effect = VibrationEffect.createWaveform(vibrationPattern, amplitudes, -1);
                 vibrator.vibrate(effect);
 
+
                 Log.d("FeedBackController", "✅ Sun Azimuth Vibration triggered.");
             } else {
                 Log.e("FeedBackController", "❌ Device does not support vibration.");
@@ -108,6 +110,7 @@ public class FeedBackController implements SensorEventListener {
                 }
 
                 vibrator.vibrate(VibrationEffect.createWaveform(vibrationPattern, amplitudes, -1));
+
 
                 Log.d("FeedBackController", "✅ Heart rate vibration triggered.");
             } else {

@@ -9,28 +9,100 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import com.example.smartwatchhapticsystem.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 101;
     private static final String TAG = "MainActivity";
 
+    // UI Components
+    private TextView tvCurrentTime;
+    private TextView tvCurrentDate;
+
+    // Time update handler
+    private Handler timeHandler;
+    private Runnable timeRunnable;
+    private static final long TIME_UPDATE_INTERVAL = 1000; // Update every second
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //  Request necessary permissions
+        // Initialize UI components
+        initializeViews();
+
+        // Start time updates
+        startTimeUpdates();
+
+        // Request necessary permissions
         checkAndRequestPermissions();
         requestCompanionAssociation();
+    }
+
+    /**
+     * Initialize UI views
+     */
+    private void initializeViews() {
+        tvCurrentTime = findViewById(R.id.tvCurrentTime);
+        tvCurrentDate = findViewById(R.id.tvCurrentDate);
+    }
+
+    /**
+     * Start real-time clock updates
+     */
+    private void startTimeUpdates() {
+        timeHandler = new Handler(Looper.getMainLooper());
+        timeRunnable = new Runnable() {
+            @Override
+            public void run() {
+                updateTimeDisplay();
+                timeHandler.postDelayed(this, TIME_UPDATE_INTERVAL);
+            }
+        };
+        // Initial update
+        updateTimeDisplay();
+        // Start periodic updates
+        timeHandler.postDelayed(timeRunnable, TIME_UPDATE_INTERVAL);
+    }
+
+    /**
+     * Update time and date display
+     */
+    private void updateTimeDisplay() {
+        Date now = new Date();
+
+        // Format time (HH:mm)
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        tvCurrentTime.setText(timeFormat.format(now));
+
+        // Format date (EEE, MMM dd)
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd", Locale.getDefault());
+        tvCurrentDate.setText(dateFormat.format(now));
+    }
+
+    /**
+     * Stop time updates to prevent memory leaks
+     */
+    private void stopTimeUpdates() {
+        if (timeHandler != null && timeRunnable != null) {
+            timeHandler.removeCallbacks(timeRunnable);
+        }
     }
 
     /**
@@ -102,10 +174,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (allGranted) {
-                Toast.makeText(this, " Permissions granted.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Permissions granted.", Toast.LENGTH_SHORT).show();
                 startServices();
             } else {
-                Toast.makeText(this, " Required permissions denied!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Required permissions denied!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -161,8 +233,20 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
         );
+
+        // Resume time updates
+        if (timeHandler != null && timeRunnable != null) {
+            updateTimeDisplay();
+            timeHandler.postDelayed(timeRunnable, TIME_UPDATE_INTERVAL);
+        }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Stop time updates when activity is paused to save battery
+        stopTimeUpdates();
+    }
 
     /**
      *  Stop Services when the app is destroyed
@@ -170,7 +254,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, " MainActivity Destroyed, Stopping Services");
+        stopTimeUpdates();
+
+
+        Log.d(TAG, "MainActivity Destroyed, Stopping Services");
         Intent serviceIntent = new Intent(this, BackgroundMonitoringService.class);
         stopService(serviceIntent);
     }

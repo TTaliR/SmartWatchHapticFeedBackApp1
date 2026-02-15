@@ -1,3 +1,26 @@
 <resources>
-    <string name="app_name">SmartWatchHapticSystem</string>
+    <string name="app_name" translatable="false">Smart Watch Haptic System</string>
+
+    <!-- Time Section -->
+    <string name="current_time" translatable="false">Current Time</string>
+    <string name="time_placeholder" translatable="false">--:--:--</string>
+    <string name="date_placeholder" translatable="false">--- --, ----</string>
+
+    <!-- Status Section -->
+    <string name="status_header">Connection Status</string>
+    <string name="bluetooth_status" translatable="false">Bluetooth</string>
+    <string name="n8n_status" translatable="false">n8n Server</string>
+    <string name="location_status" translatable="false">Location Service</string>
+
+    <!-- Status Values -->
+    <string name="status_connected">Connected</string>
+    <string name="status_disconnected">Disconnected</string>
+    <string name="status_connecting">Connecting…</string>
+    <string name="status_active">Active</string>
+    <string name="status_inactive">Inactive</string>
+
+    <!-- Info Hint -->
+    <string name="scroll_info_hint">Scroll for status</string>
+    <string name="info_icon_description">Status information below</string>
+    <string name="info_icon">ⓘ</string>
 </resources>
