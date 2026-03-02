@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     // UI Components
     private TextView tvCurrentTime;
     private TextView tvCurrentDate;
+    private TextView tvBluetoothStatus;
+    private TextView tvLocationStatus;
+    private View bluetoothStatusIndicator;
+    private View locationStatusIndicator;
 
     // Time update handler
     private Handler timeHandler;
@@ -61,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private void initializeViews() {
         tvCurrentTime = findViewById(R.id.tvCurrentTime);
         tvCurrentDate = findViewById(R.id.tvCurrentDate);
+        tvBluetoothStatus = findViewById(R.id.tvBluetoothStatus);
+        tvLocationStatus = findViewById(R.id.tvLocationStatus);
+        bluetoothStatusIndicator = findViewById(R.id.bluetoothStatusIndicator);
+        locationStatusIndicator = findViewById(R.id.locationStatusIndicator);
     }
 
     /**
@@ -138,6 +147,53 @@ public class MainActivity extends AppCompatActivity {
             // Permissions already granted, start services
             startServices();
         }
+
+        // Update UI based on current permission status
+        updatePermissionStatusUI();
+    }
+
+    /**
+     * Update UI to reflect current permission status
+     */
+    private void updatePermissionStatusUI() {
+        // Check Bluetooth permission
+        boolean bluetoothGranted;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            bluetoothGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
+                    == PackageManager.PERMISSION_GRANTED;
+        } else {
+            bluetoothGranted = true; // Not required on older versions
+        }
+
+        // Check Location/Body Sensors permission
+        boolean locationGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS)
+                == PackageManager.PERMISSION_GRANTED;
+
+        // Update Bluetooth status
+        if (bluetoothGranted) {
+            tvBluetoothStatus.setText(R.string.status_ready);
+            tvBluetoothStatus.setTextColor(ContextCompat.getColor(this, R.color.status_connected));
+            bluetoothStatusIndicator.setBackgroundTintList(
+                    ContextCompat.getColorStateList(this, R.color.status_connected));
+        } else {
+            tvBluetoothStatus.setText(R.string.status_no_permission);
+            tvBluetoothStatus.setTextColor(ContextCompat.getColor(this, R.color.status_disconnected));
+            bluetoothStatusIndicator.setBackgroundTintList(
+                    ContextCompat.getColorStateList(this, R.color.status_disconnected));
+        }
+
+        // Update Location/Sensors status
+        if (locationGranted) {
+            tvLocationStatus.setText(R.string.status_active);
+            tvLocationStatus.setTextColor(ContextCompat.getColor(this, R.color.status_connected));
+            locationStatusIndicator.setBackgroundTintList(
+                    ContextCompat.getColorStateList(this, R.color.status_connected));
+        } else {
+            tvLocationStatus.setText(R.string.status_no_permission);
+            tvLocationStatus.setTextColor(ContextCompat.getColor(this, R.color.status_disconnected));
+            locationStatusIndicator.setBackgroundTintList(
+                    ContextCompat.getColorStateList(this, R.color.status_disconnected));
+        }
     }
 
 
@@ -179,6 +235,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Required permissions denied!", Toast.LENGTH_SHORT).show();
             }
+
+            // Update UI to reflect new permission status
+            updatePermissionStatusUI();
         }
     }
 

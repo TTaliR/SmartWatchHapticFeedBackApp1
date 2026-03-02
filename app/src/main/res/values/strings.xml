@@ -9,8 +9,7 @@
     <!-- Status Section -->
     <string name="status_header">Connection Status</string>
     <string name="bluetooth_status" translatable="false">Bluetooth</string>
-    <string name="n8n_status" translatable="false">n8n Server</string>
-    <string name="location_status" translatable="false">Location Service</string>
+    <string name="body_sensors_status" translatable="false">Body Sensors</string>
 
     <!-- Status Values -->
     <string name="status_connected">Connected</string>
@@ -18,6 +17,8 @@
     <string name="status_connecting">Connecting…</string>
     <string name="status_active">Active</string>
     <string name="status_inactive">Inactive</string>
+    <string name="status_ready">Ready</string>
+    <string name="status_no_permission">No Permission</string>
 
     <!-- Info Hint -->
     <string name="scroll_info_hint">Scroll for status</string>
