@@ -33,7 +33,7 @@ public class FeedBackController implements SensorEventListener {
      * @param duration  Duration of each pulse in milliseconds
      * @param interval  Duration of pause between pulses in milliseconds
      */
-    public void triggerVibrationForSunAzimuth(int intensity, int pulses, int duration, int interval) {
+    public void triggerVibrationForLocationAPI(int intensity, int pulses, int duration, int interval) {
         Log.d("FeedBackController", "triggerVibrationForSunAzimuth called with " +
                 "Intensity=" + intensity + ", Pulses=" + pulses +
                 ", Duration=" + duration + ", Interval=" + interval);
