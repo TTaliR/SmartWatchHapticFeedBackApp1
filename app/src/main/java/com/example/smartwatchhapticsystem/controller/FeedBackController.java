@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
+
 public class FeedBackController implements SensorEventListener {
 
 
@@ -32,7 +33,7 @@ public class FeedBackController implements SensorEventListener {
      * @param duration  Duration of each pulse in milliseconds
      * @param interval  Duration of pause between pulses in milliseconds
      */
-    public void triggerVibrationForSunAzimuth(int intensity, int pulses, int duration, int interval) {
+    public void triggerVibrationForLocationAPI(int intensity, int pulses, int duration, int interval) {
         Log.d("FeedBackController", "triggerVibrationForSunAzimuth called with " +
                 "Intensity=" + intensity + ", Pulses=" + pulses +
                 ", Duration=" + duration + ", Interval=" + interval);
@@ -62,6 +63,7 @@ public class FeedBackController implements SensorEventListener {
                 // Trigger the vibration waveform
                 VibrationEffect effect = VibrationEffect.createWaveform(vibrationPattern, amplitudes, -1);
                 vibrator.vibrate(effect);
+
 
                 Log.d("FeedBackController", "✅ Sun Azimuth Vibration triggered.");
             } else {
@@ -108,6 +110,7 @@ public class FeedBackController implements SensorEventListener {
                 }
 
                 vibrator.vibrate(VibrationEffect.createWaveform(vibrationPattern, amplitudes, -1));
+
 
                 Log.d("FeedBackController", "✅ Heart rate vibration triggered.");
             } else {

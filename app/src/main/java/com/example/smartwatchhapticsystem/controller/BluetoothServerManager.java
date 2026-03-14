@@ -228,12 +228,8 @@ public class BluetoothServerManager {
                     feedbackController.triggerHeartRateVibration(intensity, pulses, duration, interval);
                     break;
 
-                case "SunAzimuth":
-                    feedbackController.triggerVibrationForSunAzimuth(intensity, pulses, duration, interval);
-                    break;
-
-                case "MoonAzimuth":
-                    feedbackController.triggerVibrationForSunAzimuth(intensity, pulses, duration, interval);
+                case "SunAzimuth", "Pollution", "MoonAzimuth", "Temperature":
+                    feedbackController.triggerVibrationForLocationAPI(intensity, pulses, duration, interval);
                     break;
 
                 default:

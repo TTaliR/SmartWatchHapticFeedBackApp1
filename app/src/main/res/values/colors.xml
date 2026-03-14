@@ -7,4 +7,20 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="status_connected">#FF4CAF50</color>
+    <color name="status_disconnected">#FFF44336</color>
+    <color name="status_pending">#FFFFC107</color>
+
+    <!-- Background Colors - Optimized for AMOLED watches -->
+    <color name="background_dark">#FF000000</color>
+    <color name="card_background">#FF1A1A1A</color>
+
+    <!-- Text Colors -->
+    <color name="text_secondary">#FFB0B0B0</color>
+
+
+    <!-- Info Icon Color -->
+    <color name="info_icon_color">#FF808080</color>
 </resources>
